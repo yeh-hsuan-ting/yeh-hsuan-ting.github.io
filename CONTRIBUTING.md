@@ -43,7 +43,7 @@ git push
 
 ## Option B — from the web, at `/admin`
 
-1. Go to `https://<your-site>/admin` and sign in with GitHub.
+1. Go to `https://<your-site>/admin` and **Sign in with Token** (a GitHub PAT — see README step 2).
 2. **Posts → New Post**, fill the fields, write in the Markdown editor, **Save**.
 3. Saving commits to the **`cms`** branch — this does **not** deploy.
 4. To publish: merge `cms` → `main` (open a PR on GitHub and merge it, or

@@ -5,8 +5,9 @@ backend:
   name: github
   repo: yeh-hsuan-ting/miscellany
   branch: cms # CMS commits land here, NOT main — so saving never deploys.
-  # OAuth via the sveltia-cms-auth Cloudflare Worker (see README step 2).
-  base_url: https://YOUR-WORKER.SUBDOMAIN.workers.dev # TODO: your Worker URL
+  # Auth: "Sign in with Token" (a GitHub PAT). No OAuth App / Worker needed.
+  # To switch to the OAuth login flow later, deploy sveltia-cms-auth and add:
+  #   base_url: https://<your-worker>.workers.dev
 
 # Uploaded media is committed to the repo under public/uploads
 # and served at /uploads/<file> on the live site.
