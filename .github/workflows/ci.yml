@@ -1,0 +1,40 @@
+name: CI
+
+# Authoritative quality gate. Runs on every PR (the cms → main publish path)
+# and on pushes to any branch except `cms` — CMS draft-saves shouldn't burn CI.
+# Pushes to `main` also run here, in parallel with the deploy workflow.
+on:
+  pull_request:
+  push:
+    branches-ignore: [cms]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck (astro check)
+        run: npm run check
+
+      - name: Test + coverage
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build

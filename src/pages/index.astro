@@ -2,12 +2,11 @@
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { listPosts } from '../lib/posts';
 
 // Drafts are visible while running `astro dev` (handy for previewing),
 // but excluded from `astro build` output.
-const posts = (
-  await getCollection('posts', ({ data }) => import.meta.env.DEV || !data.draft)
-).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const posts = listPosts(await getCollection('posts'), import.meta.env.DEV);
 
 const fmt = (d: Date) =>
   d.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -28,10 +27,7 @@ const fmt = (d: Date) =>
                   </span>
                 )}
               </span>
-              <time
-                datetime={post.data.pubDate.toISOString()}
-                class="label whitespace-nowrap"
-              >
+              <time datetime={post.data.pubDate.toISOString()} class="label whitespace-nowrap">
                 {fmt(post.data.pubDate)}
               </time>
             </div>

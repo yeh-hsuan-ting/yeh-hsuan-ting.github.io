@@ -8,7 +8,15 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
-    "astro": "astro"
+    "astro": "astro",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "quality": "npm run lint && npm run check && npm run test:coverage && npm run build"
   },
   "dependencies": {
     "@astrojs/mdx": "^6.0.3",
@@ -20,6 +28,16 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
-    "typescript": "^6.0.3"
+    "@eslint/js": "^10.0.1",
+    "@vitest/coverage-v8": "^4.1.9",
+    "eslint": "^10.5.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^1.7.0",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4",
+    "prettier-plugin-astro": "^0.14.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1",
+    "vitest": "^4.1.9"
   }
 }

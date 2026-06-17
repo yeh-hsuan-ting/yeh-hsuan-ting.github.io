@@ -1,13 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import { listPosts } from '../../lib/posts';
 
 export async function getStaticPaths() {
   // Drafts produce pages in dev only; never in the build output.
-  const posts = await getCollection(
-    'posts',
-    ({ data }) => import.meta.env.DEV || !data.draft,
-  );
+  const posts = listPosts(await getCollection('posts'), import.meta.env.DEV);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },

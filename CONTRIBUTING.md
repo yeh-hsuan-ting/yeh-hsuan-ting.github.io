@@ -3,13 +3,13 @@
 A post is a Markdown file in `src/content/posts/`. Frontmatter must satisfy the
 zod schema in `src/content.config.ts`:
 
-| Field | Type | Required | Notes |
-| --- | --- | --- | --- |
-| `title` | string | yes | |
-| `pubDate` | date | yes | `2026-06-17` or ISO datetime |
-| `description` | string | no | used in lists + `<meta>` + RSS |
-| `draft` | boolean | no (default `true`) | `true` = hidden from build & feed |
-| `tags` | string[] | no | |
+| Field         | Type     | Required            | Notes                             |
+| ------------- | -------- | ------------------- | --------------------------------- |
+| `title`       | string   | yes                 |                                   |
+| `pubDate`     | date     | yes                 | `2026-06-17` or ISO datetime      |
+| `description` | string   | no                  | used in lists + `<meta>` + RSS    |
+| `draft`       | boolean  | no (default `true`) | `true` = hidden from build & feed |
+| `tags`        | string[] | no                  |                                   |
 
 The Markdown body below the frontmatter is the post content.
 

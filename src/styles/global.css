@@ -11,8 +11,8 @@
      PingFang TC ships on macOS/iOS, JhengHei on Windows, Noto Sans TC on
      Android/Linux. Whichever exists is used; nothing is downloaded. */
   --font-sans:
-    'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Microsoft JhengHei',
-    'Noto Sans TC', system-ui, sans-serif;
+    'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC',
+    system-ui, sans-serif;
   --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
 
   /* Monochrome, dark-by-default canvas. No accent hue on purpose. */
