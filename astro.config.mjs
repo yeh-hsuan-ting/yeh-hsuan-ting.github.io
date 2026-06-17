@@ -7,6 +7,6 @@ import sitemap from '@astrojs/sitemap';
 // RSS feed links and the sitemap are generated from it.
 // Keep it in sync with SITE_URL in src/consts.ts.
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://yeh-hsuan-ting.github.io',
   integrations: [mdx(), sitemap()],
 });

@@ -2,7 +2,7 @@
 
 A minimal, reading-focused writing site. Astro + TypeScript, content as Markdown
 in a content collection, [Sveltia CMS](https://sveltiacms.app) at `/admin` for
-web editing, deployed to Cloudflare Pages.
+web editing, deployed to GitHub Pages (user site at `https://yeh-hsuan-ting.github.io`).
 
 - **Content**: `src/content/posts/*.md` — schema enforced by zod in `src/content.config.ts`.
 - **Drafts**: `draft: true` posts are excluded from the build and the RSS feed
@@ -29,8 +29,8 @@ directly to whatever branch `config.yml` points at on every save. To get
 "save drafts without deploying," this repo uses a **branch split**:
 
 - The CMS (`public/admin/config.yml`) commits to the **`cms`** branch.
-- Cloudflare Pages builds **production from `main` only**.
-- **Saving in `/admin` never triggers a production deploy.**
+- The GitHub Pages Action builds **only on push to `main`** (see `.github/workflows/deploy.yml`).
+- **Saving in `/admin` never triggers a deploy.**
 - **Publishing = merge `cms` → `main`** (e.g. open a PR on GitHub and merge,
   or `git checkout main && git merge cms && git push`).
 
@@ -47,18 +47,11 @@ a post stays out of the live site and feed until you flip it to `draft: false`.
 These can't be done from code — do them once, in order. Replace every
 `<PLACEHOLDER>`.
 
-### 1. Push this repo to GitHub
+### 1. Repo on GitHub — done
 
-```sh
-git init
-git add -A
-git commit -m "Initial scaffold"
-gh repo create miscellany --private --source=. --remote=origin --push
-git push -u origin main
-git branch cms main && git push -u origin cms   # create the CMS branch
-```
-
-Then in `public/admin/config.yml` set `repo: <your-gh-user>/miscellany`.
+The repo is public at **`yeh-hsuan-ting/yeh-hsuan-ting.github.io`** (a GitHub
+*user site*), with a `main` branch (production) and a `cms` branch (CMS commits).
+`public/admin/config.yml` already targets it. Nothing to do here.
 
 ### 2. Authentication — "Sign in with Token" (no Worker, default)
 
@@ -67,11 +60,11 @@ browser. **Nothing to deploy** — no OAuth App, no Cloudflare Worker.
 
 1. Create a token at <https://github.com/settings/tokens>:
    - **Fine-grained** (recommended): *Generate new token* → Resource owner: your
-     account → **Only select repositories → `miscellany`** → Repository
-     permissions → **Contents: Read and write** (Metadata: Read is added
-     automatically).
+     account → **Only select repositories → `yeh-hsuan-ting.github.io`** →
+     Repository permissions → **Contents: Read and write** (Metadata: Read is
+     added automatically).
    - or **classic**: tick the **`repo`** scope.
-2. Open `https://<your-site>/admin`, click **Sign in with Token**, paste it.
+2. Open `https://yeh-hsuan-ting.github.io/admin`, click **Sign in with Token**, paste it.
 
 `config.yml` needs no `base_url` for this — it's already configured this way.
 
@@ -95,38 +88,25 @@ Only worth it if non-technical people will edit, or you dislike pasting a token.
 
 </details>
 
-### 3. Create the Cloudflare Pages project
+### 3. Enable GitHub Pages (one click, once)
 
-Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** →
-pick this repo.
+The deploy workflow (`.github/workflows/deploy.yml`) is already committed — it
+builds with `withastro/action@v6` on every push to `main` and publishes to Pages.
+You just need to point Pages at it:
 
-| Setting | Value |
-| --- | --- |
-| Production branch | `main` |
-| Build command | `npm run build` |
-| Build output directory | `dist` |
-| Framework preset | Astro (or None) |
-| Node version (env var `NODE_VERSION`) | `22` |
+- Repo → **Settings → Pages → Build and deployment → Source: GitHub Actions**.
 
-**Stop preview builds on the `cms` branch** so saving drafts doesn't burn build
-minutes: Pages project → **Settings → Builds & deployments → Branch control /
-Preview deployments → set to "None"** (or include only branches that aren't
-`cms`). Production stays on `main`.
-
-After the first deploy, set your real URL in two places and redeploy:
-
-- `astro.config.mjs` → `site`
-- `src/consts.ts` → `SITE_URL`
-
-(RSS links + sitemap depend on this.)
+That's it. The next push to `main` runs the Action and the site goes live at
+`https://yeh-hsuan-ting.github.io/` (first run takes a couple of minutes; watch
+the **Actions** tab). `site`/`SITE_URL` are already set, so RSS + sitemap are
+correct. Drafts stay out of the build; `cms`-branch saves never deploy.
 
 ### 4. Custom domain (optional)
 
-Pages project → **Custom domains → Set up a domain** → enter your domain.
-If the domain's DNS is on Cloudflare, the record is added automatically;
-otherwise add the shown CNAME at your DNS host. Then update `site` / `SITE_URL`
-(step 3). *(If you went the OAuth route, also update the OAuth App Homepage URL
-and add the domain to `ALLOWED_DOMAINS`.)*
+Repo → **Settings → Pages → Custom domain** → enter your domain; GitHub writes a
+`CNAME` file to the repo. Add the DNS records GitHub shows at your DNS host, then
+update `site` in `astro.config.mjs` and `SITE_URL` in `src/consts.ts` to the new
+URL.
 
 ---
 

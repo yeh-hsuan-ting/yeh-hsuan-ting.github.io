@@ -3,7 +3,7 @@
 
 backend:
   name: github
-  repo: yeh-hsuan-ting/miscellany
+  repo: yeh-hsuan-ting/yeh-hsuan-ting.github.io
   branch: cms # CMS commits land here, NOT main — so saving never deploys.
   # Auth: "Sign in with Token" (a GitHub PAT). No OAuth App / Worker needed.
   # To switch to the OAuth login flow later, deploy sveltia-cms-auth and add:
