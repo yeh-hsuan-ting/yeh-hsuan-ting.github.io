@@ -10,22 +10,33 @@ const posts = (
 ).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
 const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  d.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <ul class="post-list">
+  <ul class="flex flex-col">
     {
       posts.map((post) => (
-        <li>
-          <a href={`/posts/${post.id}/`}>
-            <span class="post-list-title">
-              {post.data.title}
-              {post.data.draft && <span class="draft-tag">draft</span>}
-            </span>
-            <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+        <li class="border-b border-rule">
+          <a href={`/posts/${post.id}/`} class="group block py-6 text-fg no-underline">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <span class="text-lg group-hover:underline">
+                {post.data.title}
+                {post.data.draft && (
+                  <span class="label ml-2 border border-rule px-1.5 py-0.5 align-middle text-[0.6rem]">
+                    草稿
+                  </span>
+                )}
+              </span>
+              <time
+                datetime={post.data.pubDate.toISOString()}
+                class="label whitespace-nowrap"
+              >
+                {fmt(post.data.pubDate)}
+              </time>
+            </div>
+            {post.data.description && <p class="mt-1 text-muted">{post.data.description}</p>}
           </a>
-          {post.data.description && <p class="post-list-desc">{post.data.description}</p>}
         </li>
       ))
     }

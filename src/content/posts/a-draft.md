@@ -1,11 +1,11 @@
 ---
-title: A post in progress
+title: 一篇還在寫的文章
 pubDate: 2026-06-16
-description: This one is a draft — it won't appear in the build or the feed.
+description: 這是一篇草稿——它不會出現在建置結果或訂閱裡。
 draft: true
 tags:
   - draft
 ---
 
-Still cooking. Because `draft: true`, this post is hidden from the production
-build and the RSS feed, but visible in `npm run dev`.
+還在醞釀中。因為 `draft: true`，這篇文章在正式建置與 RSS 訂閱中是隱藏的，但在
+`npm run dev` 裡看得到。

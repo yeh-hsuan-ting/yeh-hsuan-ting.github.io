@@ -18,17 +18,19 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 
 const fmt = (d: Date) =>
-  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  d.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' });
 ---
 
 <Base title={post.data.title} description={post.data.description}>
   <article>
-    <header class="post-header">
-      <h1>{post.data.title}</h1>
-      <time datetime={post.data.pubDate.toISOString()}>{fmt(post.data.pubDate)}</time>
+    <header class="mb-12">
+      <h1 class="text-3xl tracking-tight">{post.data.title}</h1>
+      <time datetime={post.data.pubDate.toISOString()} class="label mt-3 block">
+        {fmt(post.data.pubDate)}
+      </time>
       {
         post.data.tags && post.data.tags.length > 0 && (
-          <ul class="tags">
+          <ul class="label mt-4 flex flex-wrap gap-3">
             {post.data.tags.map((t) => (
               <li>#{t}</li>
             ))}

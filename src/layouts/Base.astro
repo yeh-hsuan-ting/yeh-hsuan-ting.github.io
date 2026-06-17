@@ -12,26 +12,28 @@ const year = new Date().getFullYear();
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-Hant-TW">
   <head>
     <BaseHead title={title} description={description} />
   </head>
-  <body>
-    <header class="site-header">
-      <a class="site-title" href="/">{SITE_TITLE}</a>
-      <nav>
-        <a href="/">Writing</a>
-        <a href="/about">About</a>
-        <a href="/rss.xml">RSS</a>
+  <body class="flex min-h-screen flex-col bg-bg font-sans text-fg antialiased">
+    <header
+      class="wrapper flex flex-wrap items-baseline justify-between gap-4 border-b border-rule pt-16 pb-6"
+    >
+      <a href="/" class="text-lg tracking-tight text-fg no-underline">{SITE_TITLE}</a>
+      <nav class="label flex gap-6">
+        <a href="/" class="hover:text-fg">寫作</a>
+        <a href="/about" class="hover:text-fg">關於</a>
+        <a href="/rss.xml" class="hover:text-fg">訂閱</a>
       </nav>
     </header>
 
-    <main>
+    <main class="wrapper flex-1 py-16">
       <slot />
     </main>
 
-    <footer class="site-footer">
-      <p>© {year} · <a href="/rss.xml">RSS</a></p>
+    <footer class="wrapper label border-t border-rule py-12">
+      <p>© {year} · <a href="/rss.xml" class="hover:text-fg">訂閱</a></p>
     </footer>
   </body>
 </html>
