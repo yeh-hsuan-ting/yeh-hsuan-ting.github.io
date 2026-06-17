@@ -3,7 +3,7 @@
 
 backend:
   name: github
-  repo: OWNER/miscellany # TODO: set to your GitHub "user-or-org/repo"
+  repo: yeh-hsuan-ting/miscellany
   branch: cms # CMS commits land here, NOT main — so saving never deploys.
   # OAuth via the sveltia-cms-auth Cloudflare Worker (see README step 2).
   base_url: https://YOUR-WORKER.SUBDOMAIN.workers.dev # TODO: your Worker URL
