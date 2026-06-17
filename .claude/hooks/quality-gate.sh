@@ -27,6 +27,7 @@ step "lint" "npm run lint --silent"
 step "astro check" "npm run check --silent"
 step "tests + coverage" "npm run test:coverage --silent"
 step "build" "npm run build --silent"
+step "format" "npm run format:check"
 
 echo "✓ quality gate passed" >&2
 exit 0
