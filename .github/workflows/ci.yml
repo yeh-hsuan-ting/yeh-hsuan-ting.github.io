@@ -1,12 +1,14 @@
 name: CI
 
-# Authoritative quality gate. Runs on every PR (the cms → main publish path)
-# and on pushes to any branch except `cms` — CMS draft-saves shouldn't burn CI.
-# Pushes to `main` also run here, in parallel with the deploy workflow.
+# Authoritative quality gate.
+# - pull_request: covers every PR branch (incl. the cms → main publish path).
+# - push to main: covers direct pushes/merges, in parallel with deploy.
+# Splitting the triggers this way means a PR branch runs the gate ONCE
+# (via pull_request), not twice. Feature branches get CI once a PR is opened.
 on:
   pull_request:
   push:
-    branches-ignore: [cms]
+    branches: [main]
 
 permissions:
   contents: read
