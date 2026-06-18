@@ -24,21 +24,17 @@ npm run check      # astro check (types)
 
 ## Draft → publish model (important)
 
-Sveltia CMS has **no editorial-workflow yet** (planned pre-1.0). It commits
-directly to whatever branch `config.yml` points at on every save. To get
-"save drafts without deploying," this repo uses a **branch split**:
+The CMS commits straight to **`main`** on every save, and the GitHub Pages
+Action builds on every push to `main`. There's no staging branch — the
+**`draft` flag is the single publish control**:
 
-- The CMS (`public/admin/config.yml`) commits to the **`cms`** branch.
-- The GitHub Pages Action builds **only on push to `main`** (see `.github/workflows/deploy.yml`).
-- **Saving in `/admin` never triggers a deploy.**
-- **Publishing = merge `cms` → `main`** (e.g. open a PR on GitHub and merge,
-  or `git checkout main && git merge cms && git push`).
+- The CMS (`public/admin/config.yml`) commits to **`main`**.
+- The GitHub Pages Action builds **on every push to `main`** (see `.github/workflows/deploy.yml`).
+- **`draft: true`** — committed to `main`, but kept out of the live site and feed.
+- **`draft: false`** — surfaced on the live site and feed on the next deploy.
 
-`draft: true` is a second, independent layer: even after you merge to `main`,
-a post stays out of the live site and feed until you flip it to `draft: false`.
-
-> So the full lifecycle is: write in `/admin` (→ `cms`) → merge `cms`→`main`
-> when ready to deploy → set `draft: false` to actually surface the post.
+> So the lifecycle is: write in `/admin` (committed to `main`, `draft: true` so
+> it stays hidden) → set `draft: false` and save to surface the post.
 
 ---
 
@@ -50,7 +46,7 @@ These can't be done from code — do them once, in order. Replace every
 ### 1. Repo on GitHub — done
 
 The repo is public at **`yeh-hsuan-ting/yeh-hsuan-ting.github.io`** (a GitHub
-_user site_), with a `main` branch (production) and a `cms` branch (CMS commits).
+_user site_), with a `main` branch (production) that the CMS commits to directly.
 `public/admin/config.yml` already targets it. Nothing to do here.
 
 ### 2. Authentication — "Sign in with Token" (no Worker, default)
@@ -99,7 +95,7 @@ You just need to point Pages at it:
 That's it. The next push to `main` runs the Action and the site goes live at
 `https://yeh-hsuan-ting.github.io/` (first run takes a couple of minutes; watch
 the **Actions** tab). `site`/`SITE_URL` are already set, so RSS + sitemap are
-correct. Drafts stay out of the build; `cms`-branch saves never deploy.
+correct. Drafts stay out of the build; the `draft` flag controls publishing.
 
 ### 4. Custom domain (optional)
 

@@ -1,7 +1,8 @@
 name: Deploy to GitHub Pages
 
-# Production builds only from main, so saving drafts to the `cms` branch
-# never triggers a deploy. Trigger manually too, via the Actions tab.
+# Builds on every push to main, including CMS saves (which commit straight to
+# main). Drafts stay out of the live site via the `draft` flag, not a branch.
+# Trigger manually too, via the Actions tab.
 on:
   push:
     branches: [main]
