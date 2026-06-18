@@ -45,10 +45,10 @@ git push
 
 1. Go to `https://<your-site>/admin` and **Sign in with Token** (a GitHub PAT — see README step 2).
 2. **Posts → New Post**, fill the fields, write in the Markdown editor, **Save**.
-3. Saving commits to the **`cms`** branch — this does **not** deploy.
-4. To publish: merge `cms` → `main` (open a PR on GitHub and merge it, or
-   locally `git checkout main && git merge cms && git push`). Make sure the
-   post's **Draft** toggle is off so it appears on the live site.
+3. Saving commits straight to **`main`** and triggers a deploy.
+4. The **Draft** toggle is the publish control: leave it **on** while writing
+   (committed to `main` but hidden from the live site + feed), then turn it
+   **off** when the post is ready to appear.
 
 See the "Draft → publish model" section in [README.md](./README.md) for why it
 works this way.

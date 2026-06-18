@@ -38,8 +38,9 @@ Chinese (`zh-Hant-TW`), deployed to GitHub Pages.
   (`src/lib/schema.ts`).
 - **Draft model**: drafts show in `astro dev` only — never in the build output
   or the RSS feed. Everything routes through `listPosts()` in `src/lib/posts.ts`.
-- **Publish flow**: CMS saves to the `cms` branch (no deploy); publishing is a
-  `cms → main` merge/PR. Push to `main` builds + deploys (`.github/workflows/deploy.yml`).
+- **Publish flow**: the CMS commits straight to `main`, and every push to `main`
+  builds + deploys (`.github/workflows/deploy.yml`). The `draft` flag is the
+  publish control — `draft: true` is committed but hidden; flip to `false` to go live.
 - Testable logic lives in `src/lib/**` (pure, no `astro:` imports), with a
   colocated `*.test.ts`. `.astro` templates are covered by check + build.
 
