@@ -27,13 +27,9 @@ collections:
     # Fields map 1:1 to the zod schema in src/content.config.ts
     fields:
       - { name: title, label: Title, widget: string }
-      - {
-          name: pubDate,
-          label: Pub date,
-          widget: datetime,
-          picker_utc: false,
-          format: "yyyy-MM-dd'T'HH:mm:ssXXX",
-        }
+      # Sveltia uses Day.js tokens (uppercase YYYY-MM-DD), not Java (yyyy-MM-dd).
+      # Date-only, matching the existing posts' `pubDate: YYYY-MM-DD`.
+      - { name: pubDate, label: Pub date, widget: date, format: 'YYYY-MM-DD' }
       - { name: description, label: Description, widget: string, required: false }
       - { name: draft, label: Draft, widget: boolean, default: true }
       - { name: tags, label: Tags, widget: list, required: false }
