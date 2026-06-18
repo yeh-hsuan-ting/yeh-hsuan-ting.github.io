@@ -50,7 +50,7 @@ These can't be done from code — do them once, in order. Replace every
 ### 1. Repo on GitHub — done
 
 The repo is public at **`yeh-hsuan-ting/yeh-hsuan-ting.github.io`** (a GitHub
-*user site*), with a `main` branch (production) and a `cms` branch (CMS commits).
+_user site_), with a `main` branch (production) and a `cms` branch (CMS commits).
 `public/admin/config.yml` already targets it. Nothing to do here.
 
 ### 2. Authentication — "Sign in with Token" (no Worker, default)
@@ -59,7 +59,7 @@ Sveltia authenticates with a GitHub **Personal Access Token** stored in your
 browser. **Nothing to deploy** — no OAuth App, no Cloudflare Worker.
 
 1. Create a token at <https://github.com/settings/tokens>:
-   - **Fine-grained** (recommended): *Generate new token* → Resource owner: your
+   - **Fine-grained** (recommended): _Generate new token_ → Resource owner: your
      account → **Only select repositories → `yeh-hsuan-ting.github.io`** →
      Repository permissions → **Contents: Read and write** (Metadata: Read is
      added automatically).

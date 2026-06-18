@@ -1,0 +1,45 @@
+name: CI
+
+# Authoritative quality gate.
+# - pull_request: covers every PR branch (incl. the cms → main publish path).
+# - push to main: covers direct pushes/merges, in parallel with deploy.
+# Splitting the triggers this way means a PR branch runs the gate ONCE
+# (via pull_request), not twice. Feature branches get CI once a PR is opened.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck (astro check)
+        run: npm run check
+
+      - name: Test + coverage
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Format check
+        run: npm run format:check

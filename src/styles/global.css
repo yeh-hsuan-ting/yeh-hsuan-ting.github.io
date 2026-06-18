@@ -1,205 +1,125 @@
-/* ---- Self-hosted fonts (variable woff2, latin subset) ---- */
-@font-face {
-  font-family: 'Inter';
-  src: url('/fonts/inter.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Newsreader';
-  src: url('/fonts/newsreader.woff2') format('woff2');
-  font-weight: 200 800;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Newsreader';
-  src: url('/fonts/newsreader-italic.woff2') format('woff2');
-  font-weight: 200 800;
-  font-style: italic;
-  font-display: swap;
-}
+/* Tailwind v4 entry. This single import pulls in Tailwind's reset (preflight)
+   and makes every utility class available. Tokens declared in @theme below
+   also generate matching utilities (e.g. --color-fg -> text-fg, bg-fg). */
+@import 'tailwindcss';
 
-/* ---- Design tokens ---- */
-:root {
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+/* ---- Design tokens (the "system") ----
+   @theme is Tailwind v4's token block. Each var here is BOTH a CSS custom
+   property (var(--color-fg)) AND a utility generator (text-fg, bg-fg, ...). */
+@theme {
+  /* Grotesque latin + system Traditional Chinese stack — zero web-font weight.
+     PingFang TC ships on macOS/iOS, JhengHei on Windows, Noto Sans TC on
+     Android/Linux. Whichever exists is used; nothing is downloaded. */
+  --font-sans:
+    'Helvetica Neue', Helvetica, Arial, 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC',
+    system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
 
-  /* type scale (1.25 major third), base 1.125rem */
-  --text-sm: 0.8rem;
-  --text-base: 1.125rem;
-  --text-lg: 1.406rem;
-  --text-xl: 1.758rem;
-  --text-2xl: 2.197rem;
-
-  --measure: 65ch;
-  --leading: 1.7;
-  --space: 1.5rem;
-
-  --bg: #fdfdfc;
-  --fg: #1b1b18;
-  --fg-muted: #6b6b64;
-  --accent: #9a3b2e;
-  --rule: #e6e4df;
-  --code-bg: #f2f1ec;
+  /* Monochrome, dark-by-default canvas. No accent hue on purpose. */
+  --color-bg: #0b0b0c;
+  --color-fg: #ededed;
+  --color-muted: #8c8c8c;
+  --color-rule: #242427;
+  --color-code: #1a1a1d;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #16161a;
-    --fg: #e8e6e0;
-    --fg-muted: #9a988f;
-    --accent: #e0917f;
-    --rule: #2b2b30;
-    --code-bg: #232328;
+/* ---- Base layer: site-wide element defaults ---- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    line-height: 1.8; /* roomy leading reads well for mixed CJK + latin */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: var(--color-fg);
+    color: var(--color-bg);
   }
 }
 
-/* ---- Reset-ish ---- */
-*,
-*::before,
-*::after { box-sizing: border-box; }
-* { margin: 0; }
-html { -webkit-text-size-adjust: 100%; }
-img, svg { max-width: 100%; height: auto; display: block; }
+/* ---- Components: long-form article styling ----
+   Tailwind's preflight strips list bullets, heading sizes and link colours,
+   so prose content (rendered Markdown) needs them restored here. Flat and
+   monochrome to match the Co-Star aesthetic: no rounded corners, no accent. */
+@layer components {
+  /* Page-width container shared by the header, main and footer. */
+  .wrapper {
+    @apply mx-auto w-full max-w-2xl px-6;
+  }
 
-body {
-  font-family: var(--font-serif);
-  font-size: var(--text-base);
-  line-height: var(--leading);
-  color: var(--fg);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  padding: 0 var(--space);
-}
+  /* Small-caps metadata label: nav, dates, tags, footer. */
+  .label {
+    @apply text-xs tracking-widest text-muted uppercase;
+  }
 
-/* ---- Layout rhythm ---- */
-.site-header,
-main,
-.site-footer {
-  max-width: var(--measure);
-  margin-inline: auto;
+  .prose {
+    font-size: 1.0625rem;
+  }
+  .prose > * + * {
+    margin-top: 1.5rem;
+  }
+  .prose h2 {
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+    margin-top: 3rem;
+  }
+  .prose h3 {
+    font-size: 1.25rem;
+    margin-top: 2.25rem;
+  }
+  .prose a {
+    color: var(--color-fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-muted);
+  }
+  .prose a:hover {
+    text-decoration-color: var(--color-fg);
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4rem;
+  }
+  .prose ul {
+    list-style: disc;
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose li + li {
+    margin-top: 0.4rem;
+  }
+  .prose blockquote {
+    border-left: 2px solid var(--color-rule);
+    padding-left: 1.2rem;
+    color: var(--color-muted);
+  }
+  .prose code {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+    background: var(--color-code);
+    padding: 0.15em 0.4em;
+  }
+  .prose pre {
+    background: var(--color-code);
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+  }
+  .prose pre code {
+    background: none;
+    padding: 0;
+  }
+  .prose hr {
+    border: 0;
+    border-top: 1px solid var(--color-rule);
+    margin: 3rem 0;
+  }
+  .prose img {
+    margin-inline: auto;
+  }
+  .prose strong {
+    font-weight: 600;
+  }
 }
-
-.site-header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 2.5rem 0 1.25rem;
-  border-bottom: 1px solid var(--rule);
-}
-.site-title {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: var(--text-lg);
-  letter-spacing: -0.01em;
-  color: var(--fg);
-  text-decoration: none;
-}
-.site-header nav {
-  display: flex;
-  gap: 1.25rem;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.site-header nav a { color: var(--fg-muted); text-decoration: none; }
-.site-header nav a:hover { color: var(--accent); }
-
-main { padding: 3rem 0; min-height: 60vh; }
-
-.site-footer {
-  border-top: 1px solid var(--rule);
-  padding: 2rem 0 3rem;
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  color: var(--fg-muted);
-}
-.site-footer a { color: inherit; }
-
-/* ---- Links & headings ---- */
-a { color: var(--accent); text-underline-offset: 2px; }
-
-h1, h2, h3 {
-  font-family: var(--font-sans);
-  font-weight: 650;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
-}
-
-/* ---- Post list (index) ---- */
-.post-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 2.25rem; }
-.post-list a {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.5rem 1rem;
-  text-decoration: none;
-  color: var(--fg);
-}
-.post-list-title { font-size: var(--text-lg); font-weight: 500; }
-.post-list a:hover .post-list-title { color: var(--accent); }
-.post-list time {
-  font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  color: var(--fg-muted);
-  white-space: nowrap;
-}
-.post-list-desc { color: var(--fg-muted); margin-top: 0.4rem; }
-.draft-tag {
-  font-family: var(--font-sans);
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--bg);
-  background: var(--accent);
-  padding: 0.1em 0.45em;
-  border-radius: 3px;
-  margin-left: 0.6em;
-  vertical-align: middle;
-}
-
-/* ---- Post page ---- */
-.post-header { margin-bottom: 2.5rem; }
-.post-header h1 { font-size: var(--text-2xl); margin-bottom: 0.5rem; }
-.post-header time { font-family: var(--font-sans); font-size: var(--text-sm); color: var(--fg-muted); }
-.tags { list-style: none; display: flex; flex-wrap: wrap; gap: 0.6rem; padding: 0; margin-top: 0.9rem; }
-.tags li { font-family: var(--font-sans); font-size: var(--text-sm); color: var(--fg-muted); }
-
-/* ---- Prose ---- */
-.prose > * + * { margin-top: var(--space); }
-.prose h2 { font-size: var(--text-xl); margin-top: 2.5rem; }
-.prose h3 { font-size: var(--text-lg); margin-top: 2rem; }
-.prose p, .prose li { max-width: var(--measure); }
-.prose ul, .prose ol { padding-left: 1.4rem; }
-.prose li + li { margin-top: 0.4rem; }
-.prose blockquote {
-  border-left: 3px solid var(--rule);
-  padding-left: 1.2rem;
-  color: var(--fg-muted);
-  font-style: italic;
-}
-.prose a { color: var(--accent); }
-.prose code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 0.875em;
-  background: var(--code-bg);
-  padding: 0.15em 0.35em;
-  border-radius: 4px;
-}
-.prose pre {
-  background: var(--code-bg);
-  padding: 1rem 1.2rem;
-  border-radius: 8px;
-  overflow-x: auto;
-}
-.prose pre code { background: none; padding: 0; font-size: 0.85em; }
-.prose hr { border: none; border-top: 1px solid var(--rule); margin: 2.5rem 0; }
-.prose img { border-radius: 8px; margin-inline: auto; }
