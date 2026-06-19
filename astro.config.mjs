@@ -3,6 +3,8 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
+import { unified } from '@astrojs/markdown-remark';
+import remarkBreaks from './src/lib/remarkBreaks';
 
 // IMPORTANT: set this to your real production URL.
 // RSS feed links and the sitemap are generated from it.
@@ -12,4 +14,9 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   // Tailwind v4 plugs in via Vite — no tailwind.config.js needed.
   vite: { plugins: [tailwindcss()] },
+  markdown: {
+    processor: unified({
+      remarkPlugins: [remarkBreaks],
+    }),
+  },
 });
