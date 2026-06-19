@@ -12,23 +12,18 @@ export default function remarkBreaks() {
     visit(tree, 'text', (node, index, parent) => {
       if (index === undefined || parent === undefined) return;
       if (!node.value.includes('\n')) return;
-      const arr = node.value.split('\n'); // [a , b], given a\nb
 
-      let i;
-      const newChildren: Array<Text | Break> = [];
-      for (i = 0; i < arr.length; i++) {
-        newChildren.push({ type: 'text', value: arr[i] });
-        if (i !== arr.length - 1) {
-          // not last item
-          newChildren.push({ type: 'break' });
-        }
-      }
+      // 'a\nb\nc' → text('a'), break, text('b'), break, text('c')
+      const replacement = node.value
+        .split('\n')
+        .flatMap(
+          (value, i): Array<Text | Break> =>
+            i === 0 ? [{ type: 'text', value }] : [{ type: 'break' }, { type: 'text', value }],
+        );
 
-      // replace the original one with the new children
-      parent.children.splice(index, 1, ...newChildren);
-
-      // control cursor to process the next item
-      return [SKIP, index + newChildren.length];
+      // 把原本那顆 text 換成這一串，游標跳到插入節點之後（避免重訪）
+      parent.children.splice(index, 1, ...replacement);
+      return [SKIP, index + replacement.length];
     });
   };
 }
