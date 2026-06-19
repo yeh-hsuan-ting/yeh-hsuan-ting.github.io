@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
-import type { Root, Paragraph } from 'mdast';
+import type { Root, Paragraph, Text } from 'mdast';
 import remarkBreaks from './remarkBreaks';
 
 /**
@@ -26,5 +26,21 @@ describe('remarkBreaks', () => {
 
   it('多行 → 每個換行一個 break', () => {
     expect(childTypes('一\n二\n三')).toEqual(['text', 'break', 'text', 'break', 'text']);
+  });
+
+  it('前後多餘的 \\n 會被濾掉，不產生前導/尾隨 break', () => {
+    const tree: Root = {
+      type: 'root',
+      children: [{ type: 'paragraph', children: [{ type: 'text', value: '\nfoo\n' }] }],
+    };
+    remarkBreaks()(tree);
+    const paragraph = tree.children[0] as Paragraph;
+    expect(paragraph.children.map((child) => child.type)).toEqual(['text']);
+  });
+
+  it('root 層的 text node（沒有 parent/index）→ guard 直接跳過，不動它', () => {
+    const lone: Text = { type: 'text', value: 'a\nb' };
+    remarkBreaks()(lone as unknown as Root);
+    expect(lone.value).toBe('a\nb');
   });
 });

@@ -14,8 +14,10 @@ export default function remarkBreaks() {
       if (!node.value.includes('\n')) return;
 
       // 'a\nb\nc' → text('a'), break, text('b'), break, text('c')
+      // filter(Boolean) 去掉前導/尾隨 \n 造成的空字串，避免多餘的 break
       const replacement = node.value
         .split('\n')
+        .filter(Boolean)
         .flatMap(
           (value, i): Array<Text | Break> =>
             i === 0 ? [{ type: 'text', value }] : [{ type: 'break' }, { type: 'text', value }],
